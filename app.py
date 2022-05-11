@@ -5,6 +5,9 @@ import pickle
 import LMTrP
 import numpy as np
 
+#----------lib for ROI
+from PROIE import *
+
 def predict(image, knn_clf=None, model_path=None, distance_threshold=0.6):
     """
     Recognizes faces in given image using a trained KNN classifier
