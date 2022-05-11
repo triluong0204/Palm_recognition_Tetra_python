@@ -1,25 +1,11 @@
-from matplotlib.colors import ListedColormap
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
-from imutils import paths
-import numpy as np
-import argparse
-import imutils
-import cv2
 import os
+from smtplib import LMTP
 import LMTrP
-import matplotlib.pyplot as plt
-import pickle
 
-model = pickle.loads(open("model.cpickle", "rb").read())
+X_img_path = "dataset_palm/test"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', "bmp"}
 
-def findMostOccur(arr):
-    labels = set(arr) # set label
-    ans = ""
-    maxOccur = 0
-    for label in labels:
-        num = arr.count(label)
-        if num > maxOccur:
-            maxOccur = num
-            ans = label
-    return ans
+for image_file in os.listdir("dataset_palm/test"):
+    print(image_file)
+    full_file_path = os.path.join("dataset_palm/test", image_file)
+    print(format(full_file_path))
