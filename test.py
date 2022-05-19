@@ -1,11 +1,15 @@
 import os
 from smtplib import LMTP
-import LMTrP
+import main_windows
+import setup
+import ptkhac
 
-X_img_path = "dataset_palm/test"
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', "bmp"}
 
-for image_file in os.listdir("dataset_palm/test"):
-    print(image_file)
-    full_file_path = os.path.join("dataset_palm/test", image_file)
-    print(format(full_file_path))
+if __name__ == "__main__":
+    import sys
+    app = main_windows.QtWidgets.QApplication(sys.argv)
+    MainWindow = main_windows.QtWidgets.QMainWindow()
+    ui = main_windows.Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
