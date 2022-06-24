@@ -40,6 +40,9 @@ def predict(image, knn_clf=None, model_path=None, distance_threshold=0.6):
 
     print(knn_clf.predict_proba(faces_encodings))
     closest_distances = knn_clf.kneighbors(faces_encodings, n_neighbors=1)
+
+
+    acc = knn_clf.score()
     return knn_clf.predict(faces_encodings)
 
 if __name__ == "__main__":
@@ -49,21 +52,44 @@ if __name__ == "__main__":
     # classifier = train("dataset_palm/train", model_save_path="trained_knn_model.clf", n_neighbors=2)
     # print("Training complete!")
 
-    image =  cv2.imread("0001_0001.bmp")
+    # for class_dir in os.listdir("dataset_palm/test1"):
+    #     print(class_dir)
 
-    predictions = predict(image, model_path="trained_knn_model.clf")
-    print(predictions)
+    #     path = "dataset_palm/test1/" + class_dir
+    #     print(path)
+    #     image =  cv2.imread(path)
 
-    # STEP 2: Using the trained classifier, make predictions for unknown images
-    # for image_file in os.listdir("dataset_palm/test"): 
-    #     #full_file_path = os.path.join("dataset_palm/test", image_file)
-    #     full_file_path = "dataset_palm/test" + "/" + image_file
-    #     print(full_file_path)
-
-    #     print("Looking for faces in {}".format(image_file))
-
-    #     # Find all people in the image using a trained classifier model
-    #     # Note: You can pass in either a classifier file name or a classifier model instance
-    #     predictions = predict(full_file_path, model_path="trained_knn_model.clf")
-
+    #     predictions = predict(image, model_path="trained_knn_model.clf")
     #     print(predictions)
+
+
+    with open("trained_knn_model.clf", 'rb') as f:
+        knn_clf = pickle.load(f)
+
+    testFeat = []
+    testLabels = []
+
+    
+    for class_dir in os.listdir("dataset_palm/test1"):
+        class_dir_label = class_dir.split('_')
+        a = class_dir_label[0][1:4]
+        print(a)
+        testLabels.append(a)
+        path = "dataset_palm/test1/" + class_dir
+        image =  cv2.imread(path)
+        faces_encodings = LMTrP.LMTRP_procegitss(image)
+        testFeat.append(faces_encodings)    
+
+    testFeat = np.array(testFeat)
+    nsamples, nx, ny = testFeat.shape
+    d2_train_dataset = testFeat.reshape((nsamples,nx*ny))
+    print(len(d2_train_dataset))
+    print(len(testLabels))
+
+    acc = knn_clf.score(d2_train_dataset, testLabels)
+    print("[INFO] histogram accuracy: {:.2f}%".format(acc * 100))
+
+
+
+
+    
